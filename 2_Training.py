@@ -1,92 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
 
-# # Computer Vision Nanodegree
-# 
-# ## Project: Image Captioning
-# 
-# ---
-# 
-# In this notebook, you will train your CNN-RNN model.  
-# 
-# You are welcome and encouraged to try out many different architectures and hyperparameters when searching for a good model.
-# 
-# This does have the potential to make the project quite messy!  Before submitting your project, make sure that you clean up:
-# - the code you write in this notebook.  The notebook should describe how to train a single CNN-RNN architecture, corresponding to your final choice of hyperparameters.  You should structure the notebook so that the reviewer can replicate your results by running the code in this notebook.  
-# - the output of the code cell in **Step 2**.  The output should show the output obtained when training the model from scratch.
-# 
-# This notebook **will be graded**.  
-# 
-# Feel free to use the links below to navigate the notebook:
-# - [Step 1](#step1): Training Setup
-# - [Step 2](#step2): Train your Model
-# - [Step 3](#step3): (Optional) Validate your Model
-
-# <a id='step1'></a>
-# ## Step 1: Training Setup
-# 
-# In this step of the notebook, you will customize the training of your CNN-RNN model by specifying hyperparameters and setting other options that are important to the training procedure.  The values you set now will be used when training your model in **Step 2** below.
-# 
-# You should only amend blocks of code that are preceded by a `TODO` statement.  **Any code blocks that are not preceded by a `TODO` statement should not be modified**.
-# 
-# ### Task #1
-# 
-# Begin by setting the following variables:
-# - `batch_size` - the batch size of each training batch.  It is the number of image-caption pairs used to amend the model weights in each training step. 
-# - `vocab_threshold` - the minimum word count threshold.  Note that a larger threshold will result in a smaller vocabulary, whereas a smaller threshold will include rarer words and result in a larger vocabulary.  
-# - `vocab_from_file` - a Boolean that decides whether to load the vocabulary from file. 
-# - `embed_size` - the dimensionality of the image and word embeddings.  
-# - `hidden_size` - the number of features in the hidden state of the RNN decoder.  
-# - `num_epochs` - the number of epochs to train the model.  We recommend that you set `num_epochs=3`, but feel free to increase or decrease this number as you wish.  [This paper](https://arxiv.org/pdf/1502.03044.pdf) trained a captioning model on a single state-of-the-art GPU for 3 days, but you'll soon see that you can get reasonable results in a matter of a few hours!  (_But of course, if you want your model to compete with current research, you will have to train for much longer._)
-# - `save_every` - determines how often to save the model weights.  We recommend that you set `save_every=1`, to save the model weights after each epoch.  This way, after the `i`th epoch, the encoder and decoder weights will be saved in the `models/` folder as `encoder-i.pkl` and `decoder-i.pkl`, respectively.
-# - `print_every` - determines how often to print the batch loss to the Jupyter notebook while training.  Note that you **will not** observe a monotonic decrease in the loss function while training - this is perfectly fine and completely expected!  You are encouraged to keep this at its default value of `100` to avoid clogging the notebook, but feel free to change it.
-# - `log_file` - the name of the text file containing - for every step - how the loss and perplexity evolved during training.
-# 
-# If you're not sure where to begin to set some of the values above, you can peruse [this paper](https://arxiv.org/pdf/1502.03044.pdf) and [this paper](https://arxiv.org/pdf/1411.4555.pdf) for useful guidance!  **To avoid spending too long on this notebook**, you are encouraged to consult these suggested research papers to obtain a strong initial guess for which hyperparameters are likely to work best.  Then, train a single model, and proceed to the next notebook (**3_Inference.ipynb**).  If you are unhappy with your performance, you can return to this notebook to tweak the hyperparameters (and/or the architecture in **model.py**) and re-train your model.
-# 
-# ### Question 1
-# 
-# **Question:** Describe your CNN-RNN architecture in detail.  With this architecture in mind, how did you select the values of the variables in Task 1?  If you consulted a research paper detailing a successful implementation of an image captioning model, please provide the reference.
-# 
-# **Answer:** 
-# 
-# 
-# ### (Optional) Task #2
-# 
-# Note that we have provided a recommended image transform `transform_train` for pre-processing the training images, but you are welcome (and encouraged!) to modify it as you wish.  When modifying this transform, keep in mind that:
-# - the images in the dataset have varying heights and widths, and 
-# - if using a pre-trained model, you must perform the corresponding appropriate normalization.
-# 
-# ### Question 2
-# 
-# **Question:** How did you select the transform in `transform_train`?  If you left the transform at its provided value, why do you think that it is a good choice for your CNN architecture?
-# 
-# **Answer:** 
-# 
-# ### Task #3
-# 
-# Next, you will specify a Python list containing the learnable parameters of the model.  For instance, if you decide to make all weights in the decoder trainable, but only want to train the weights in the embedding layer of the encoder, then you should set `params` to something like:
-# ```
-# params = list(decoder.parameters()) + list(encoder.embed.parameters()) 
-# ```
-# 
-# ### Question 3
-# 
-# **Question:** How did you select the trainable parameters of your architecture?  Why do you think this is a good choice?
-# 
-# **Answer:** 
-# 
-# ### Task #4
-# 
-# Finally, you will select an [optimizer](http://pytorch.org/docs/master/optim.html#torch.optim.Optimizer).
-# 
-# ### Question 4
-# 
-# **Question:** How did you select the optimizer used to train your model?
-# 
-# **Answer:** 
-
-# In[3]:
 
 
 import torch
@@ -185,7 +97,6 @@ total_step = math.ceil(len(data_loader.dataset.caption_lengths) / data_loader.ba
 import torch.utils.data as data
 import numpy as np
 import os
-import requests
 import time
 
 # Open the training log file.

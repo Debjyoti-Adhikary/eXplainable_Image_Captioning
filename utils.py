@@ -9,7 +9,7 @@ sys.path.append('cocoapi\PythonAPI')
 from data_loader import get_loader
 from torchvision import transforms
 
-# TODO #1: Define a transform to pre-process the testing images.
+#Defining a transform to pre-process the testing images.
 transform_test = transforms.Compose([
     transforms.Resize(256),
     transforms.CenterCrop(224),

@@ -12,21 +12,6 @@ class EncoderCNN(nn.Module):
             param.requires_grad_(True)
 
         modules = list(resnet.children())[:-1]
-        # print(len(modules))
-        # print("----------")
-        # print("modules[7][0]")
-        # print(modules[7][0])
-        # print("__________")
-        # modules.pop(7)
-        # modules.pop(6)
-        # modules[6][0].conv1 = nn.Conv2d(512, 512, kernel_size=(1, 1), stride=(1, 1), bias=False)
-        # modules[6][0].downsample[0] = nn.Conv2d(512, 2048, kernel_size=(1, 1), stride=(2, 2), bias=False)
-
-        # modules.pop(-2)
-        # modules.pop(-2)
-        # modules.pop(-2)
-        # modules.pop(-2)
-        # modules.pop(7)
         input_length = resnet.fc.in_features
         #resnet.fc.in_features #64 #256 #512 #1024 #resnet.fc.in_features
         print(len(modules),input_length)
