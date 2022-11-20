@@ -38,19 +38,14 @@ class Saliency():
         # print(generator)
         cap_score_dict = {}
         super_dictionary = {}
+        cap_bs_score_dict = {}
         # print(generator.keys())
         for dictionary in generator:
             for key,value in dictionary.items():
                 # print(key)
                 super_dictionary.setdefault(key, value[0])
                 cap_score_dict.setdefault(key,value[1])
-
-
-        # for dictionary in generator:
-        #     for key, value in dictionary.items():
-
-
-
+                cap_bs_score_dict.setdefault(key,value[2])
 
         cap_sal_dict = {}
         for keys in super_dictionary:
@@ -83,7 +78,9 @@ class Saliency():
 
             cap_sal_dict[caption] = saliency_maps
         # saliency_map = torch.mul(100,saliency_map)
-        return cap_sal_dict,cap_score_dict
+        self.encoder.eval()
+        self.decoder.eval()
+        return cap_sal_dict,cap_score_dict, cap_bs_score_dict
         # return caption, saliency_maps, logits
 
     def __call__(self,raw_input):

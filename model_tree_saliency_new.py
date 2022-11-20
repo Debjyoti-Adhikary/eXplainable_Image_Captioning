@@ -97,7 +97,7 @@ class DecoderRNN_b(nn.Module):
         and returns predicted sentence (list of tensor ids of length max_len)
         """
 
-        def lstm_rec(self,inputs, states, m_len,all_candidates, output_scores, caption, current,current_output,current_candidates, threshold=0.5):
+        def lstm_rec(self,c_score, inputs, states, m_len,all_candidates, output_scores, caption, current,current_output,current_candidates, threshold=0.5):
 
             if current!=None:
                 caption.append(current)
@@ -107,7 +107,7 @@ class DecoderRNN_b(nn.Module):
 
             if caption and (caption[-1] == 12 or caption[-1] == 1):
                 # print(f'caption = {clean_sentence(caption)}')
-                yield {clean_sentence(caption) : [output_scores,all_candidates]}
+                yield {clean_sentence(caption) : [output_scores,all_candidates,c_score]}
 
             # if m_len <= 0 or len(caption) > 20 :
             #     print(m_len)
@@ -138,9 +138,9 @@ class DecoderRNN_b(nn.Module):
                     inputs = self.word_embeddings(torch.unsqueeze(target, dim=-1)).unsqueeze(1)
                     targets.remove(target)
                     # output_scores.append(outputs)
-                    yield from lstm_rec(self, inputs, states, m_len,all_candidates.copy(), output_scores.copy(), copy.deepcopy(caption), target.item(),outputs,candidates, threshold)
+                    yield from lstm_rec(self,c_score+target_score, inputs, states, m_len,all_candidates.copy(), output_scores.copy(), copy.deepcopy(caption), target.item(),outputs,candidates, threshold)
 
-        return lstm_rec(self,inputs, states, max_len,[], [], [], None, None,None, threshold=0.7)
+        return lstm_rec(self,0 ,inputs, states, max_len,[], [], [], None, None,None, threshold=0.7)
 
     # lstm_rec(self, inputs, states, m_len,all_candidates, output_scores.copy(), copy.deepcopy(caption), target.item(),outputs,candidates[0], threshold)
     # (self,inputs, states, m_len,all_candidates, output_scores, caption, current,current_output,current_candidates, threshold=0.5)
